@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowLab Pro - Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --bg-card: #1a1a24;
+      --text: #e4e4e7;
+      --text-muted: #a1a1aa;
+      --accent: #a78bfa;
+      --border: #2a2a3a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+    p, li {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    ul {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+    li { margin-bottom: 6px; }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .card h2 { margin-top: 0; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .badge {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #fafafa;
+        --bg-card: #ffffff;
+        --text: #18181b;
+        --text-muted: #52525b;
+        --border: #e4e4e7;
+      }
+      h1 { color: #18181b; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔒 Privacy Policy</h1>
+    <p class="subtitle">FlowLab Pro — Chrome Extension</p>
+    <span class="badge">Last updated: June 15, 2026</span>
+
+    <div class="card">
+      <h2>1. Overview</h2>
+      <p>FlowLab Pro is a Chrome extension that provides an enhanced sidebar interface for Google Labs Flow (<a href="https://labs.google/fx/" target="_blank">labs.google/fx</a>) to help users generate AI media (images and videos) more efficiently. We respect your privacy and are committed to protecting your personal information.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Data We Collect</h2>
+      <p><strong>Authentication Data:</strong> When you sign in, we collect your email address and basic profile information (name, profile picture) through Google OAuth or our email-based OTP system. This is used solely for account authentication and subscription management.</p>
+      <p><strong>User-Generated Content:</strong> Prompts, images, and media you create within the extension are stored locally in your browser's Chrome Storage. We do not upload or store your creative content on our servers.</p>
+      <p><strong>Session Data:</strong> Extension settings, session names, queue data, and preferences are stored locally using Chrome's Storage API.</p>
+      <p><strong>No Browsing History:</strong> We do not collect, store, or transmit any browsing history. The extension only operates on <code>labs.google/fx/*</code> pages.</p>
+    </div>
+
+    <div class="card">
+      <h2>3. How We Use Your Data</h2>
+      <ul>
+        <li><strong>Authentication:</strong> To verify your identity and manage your subscription status</li>
+        <li><strong>Extension Functionality:</strong> To save your settings, queue items, and session state locally in your browser</li>
+        <li><strong>Google Drive (Optional):</strong> If you connect Google Drive, we use the <code>drive.file</code> scope which only allows access to files created by the extension — never your other Drive files</li>
+        <li><strong>AI Services:</strong> Your prompts are sent to Google Labs Flow API for media generation. This happens directly through the labs.google platform</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>4. Third-Party Services</h2>
+      <p>FlowLab Pro communicates with the following external services:</p>
+      <ul>
+        <li><strong>Google Labs / AI Sandbox API:</strong> For media generation (required for core functionality)</li>
+        <li><strong>Supabase:</strong> For user authentication and subscription verification</li>
+        <li><strong>Google APIs:</strong> For OAuth authentication and optional Google Drive integration</li>
+        <li><strong>OpenRouter / OpenAI (Optional):</strong> For AI-powered prompt enhancement features, only when explicitly enabled by the user</li>
+      </ul>
+      <p>Each of these services has its own privacy policy. We recommend reviewing them for details on how they handle data.</p>
+    </div>
+
+    <div class="card">
+      <h2>5. Data Storage & Security</h2>
+      <ul>
+        <li>All user data (settings, prompts, queue, sessions) is stored <strong>locally</strong> in your browser using Chrome's built-in Storage API</li>
+        <li>Authentication tokens are managed securely through Chrome's identity API</li>
+        <li>We use HTTPS for all external communications</li>
+        <li>No data is sold or shared with third parties for advertising or marketing purposes</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>6. Permissions Explained</h2>
+      <ul>
+        <li><strong>sidePanel:</strong> To display the extension's sidebar UI</li>
+        <li><strong>activeTab / tabs:</strong> To detect when you're on Google Labs Flow and communicate with the page</li>
+        <li><strong>storage / unlimitedStorage:</strong> To save your settings, queue items, prompt library, and session data locally</li>
+        <li><strong>scripting:</strong> To inject necessary scripts into Google Labs Flow pages for automation</li>
+        <li><strong>downloads:</strong> To download generated images and videos to your computer</li>
+        <li><strong>identity:</strong> To handle Google OAuth sign-in securely</li>
+        <li><strong>alarms:</strong> To schedule background tasks like auto-save</li>
+        <li><strong>offscreen:</strong> To enable audio playback for voice preview features</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>7. Your Rights</h2>
+      <ul>
+        <li><strong>Access:</strong> You can view all stored data through the extension's Settings tab</li>
+        <li><strong>Delete:</strong> You can clear all local data at any time via Settings → Clear Data, or by uninstalling the extension</li>
+        <li><strong>Portability:</strong> You can export your sessions and settings through the extension's session management features</li>
+        <li><strong>Opt-out:</strong> AI prompt enhancement and Google Drive features are optional and can be disabled</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>8. Children's Privacy</h2>
+      <p>FlowLab Pro is not intended for use by children under the age of 13. We do not knowingly collect personal information from children.</p>
+    </div>
+
+    <div class="card">
+      <h2>9. Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. Any changes will be reflected by updating the "Last updated" date at the top of this page. Continued use of the extension after changes constitutes acceptance of the updated policy.</p>
+    </div>
+
+    <div class="card">
+      <h2>10. Contact</h2>
+      <p>If you have any questions about this Privacy Policy or our data practices, please contact us at:</p>
+      <p><strong>Email:</strong> <a href="mailto:flowlabpro@gmail.com">flowlabpro@gmail.com</a></p>
+    </div>
+
+    <div class="footer">
+      <p>© 2026 FlowLab Pro. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
