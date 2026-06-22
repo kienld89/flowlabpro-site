@@ -102,37 +102,36 @@
 
     <div class="card">
       <h2>1. Overview</h2>
-      <p>FlowLab Pro is a Chrome extension that provides an enhanced sidebar interface for Google Labs Flow (<a href="https://labs.google/fx/" target="_blank">labs.google/fx</a>) to help users generate AI media (images and videos) more efficiently. We respect your privacy and are committed to protecting your personal information.</p>
+      <p>FlowLab Pro is a Chrome extension that provides an enhanced interface for media generation. We respect your privacy and are committed to protecting your personal information.</p>
     </div>
 
     <div class="card">
       <h2>2. Data We Collect</h2>
-      <p><strong>Authentication Data:</strong> When you sign in, we collect your email address and basic profile information (name, profile picture) through Google OAuth or our email-based OTP system. This is used solely for account authentication and subscription management.</p>
-      <p><strong>User-Generated Content:</strong> Prompts, images, and media you create within the extension are stored locally in your browser's Chrome Storage. We do not upload or store your creative content on our servers.</p>
-      <p><strong>Session Data:</strong> Extension settings, session names, queue data, and preferences are stored locally using Chrome's Storage API.</p>
-      <p><strong>No Browsing History:</strong> We do not collect, store, or transmit any browsing history. The extension only operates on <code>labs.google/fx/*</code> pages.</p>
+      <p><strong>Authentication Data:</strong> When you sign in, we collect your email address and basic profile information. This is used solely for account authentication and subscription management.</p>
+      <p><strong>User-Generated Content:</strong> Prompts, settings, and media configurations are stored locally in your browser's Storage. We do not upload or store your creative content on our servers.</p>
+      <p><strong>Session Data:</strong> Extension preferences and local queue data are stored locally using Chrome's Storage API.</p>
+      <p><strong>No Browsing History:</strong> We do not collect, store, or transmit your general browsing history.</p>
     </div>
 
     <div class="card">
       <h2>3. How We Use Your Data</h2>
       <ul>
-        <li><strong>Authentication:</strong> To verify your identity and manage your subscription status</li>
-        <li><strong>Extension Functionality:</strong> To save your settings, queue items, and session state locally in your browser</li>
-        <li><strong>Google Drive (Optional):</strong> If you connect Google Drive, we use the <code>drive.file</code> scope which only allows access to files created by the extension — never your other Drive files</li>
-        <li><strong>AI Services:</strong> Your prompts are sent to Google Labs Flow API for media generation. This happens directly through the labs.google platform</li>
+        <li><strong>Authentication:</strong> To verify your identity and manage your subscription status.</li>
+        <li><strong>Extension Functionality:</strong> To save your settings and local configurations.</li>
+        <li><strong>External Integrations:</strong> If you connect external cloud storage, we only access files created by the extension itself.</li>
+        <li><strong>AI Services:</strong> Your prompts are securely processed through third-party AI services necessary for the extension's core functionality.</li>
       </ul>
     </div>
 
     <div class="card">
       <h2>4. Third-Party Services</h2>
-      <p>FlowLab Pro communicates with the following external services:</p>
+      <p>FlowLab Pro communicates with the following external services to provide its features:</p>
       <ul>
-        <li><strong>Google Labs / AI Sandbox API:</strong> For media generation (required for core functionality)</li>
-        <li><strong>Supabase:</strong> For user authentication and subscription verification</li>
-        <li><strong>Google APIs:</strong> For OAuth authentication and optional Google Drive integration</li>
-        <li><strong>OpenRouter / OpenAI (Optional):</strong> For AI-powered prompt enhancement features, only when explicitly enabled by the user</li>
+        <li><strong>AI Generation APIs:</strong> For processing prompts and generating media.</li>
+        <li><strong>Authentication & Database Providers:</strong> For secure user login and subscription validation.</li>
+        <li><strong>Cloud Storage APIs (Optional):</strong> For backing up your generated content, only when explicitly enabled by you.</li>
       </ul>
-      <p>Each of these services has its own privacy policy. We recommend reviewing them for details on how they handle data.</p>
+      <p>Each of these services adheres to strict security standards and has its own privacy policy.</p>
     </div>
 
     <div class="card">
