@@ -1932,6 +1932,102 @@ public class FlowLabClient
     </main>
   </div>
 
-  <script src="api_guide_script.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize language
+  const savedLang = localStorage.getItem('flowlab_guide_lang') || 'vi';
+  document.body.classList.remove('lang-vi', 'lang-en');
+  document.body.classList.add('lang-' + savedLang);
+
+  // Language Switcher
+  const btnLangToggle = document.getElementById('btnLangToggle');
+  if (btnLangToggle) {
+    btnLangToggle.addEventListener('click', () => {
+      if (document.body.classList.contains('lang-en')) {
+        document.body.classList.remove('lang-en');
+        document.body.classList.add('lang-vi');
+        localStorage.setItem('flowlab_guide_lang', 'vi');
+      } else {
+        document.body.classList.remove('lang-vi');
+        document.body.classList.add('lang-en');
+        localStorage.setItem('flowlab_guide_lang', 'en');
+      }
+      document.dispatchEvent(new CustomEvent('langChanged'));
+    });
+  }
+
+  // Mobile menu toggle
+  const menuToggle = document.querySelector('.menu-toggle');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        sidebar.classList.toggle('active');
+      }
+    });
+  }
+
+  // Add copy button to pre blocks
+  document.querySelectorAll('pre').forEach(preBlock => {
+    if (preBlock.querySelector('.copy-btn')) return;
+
+    const button = document.createElement('button');
+    button.className = 'copy-btn';
+    
+    const updateBtnLabel = () => {
+      const isVi = document.body.classList.contains('lang-vi');
+      button.textContent = isVi ? 'copy nhanh' : 'copy';
+    };
+    updateBtnLabel();
+    document.addEventListener('langChanged', updateBtnLabel);
+    
+    button.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const codeEl = preBlock.querySelector('code');
+      let codeText = codeEl ? codeEl.textContent : preBlock.textContent;
+      
+      // Clean copy text
+      const btnTexts = ['copy nhanh', 'đã copy', 'copy', 'copied'];
+      for (const btnTxt of btnTexts) {
+        if (codeText.endsWith(btnTxt)) {
+          codeText = codeText.substring(0, codeText.length - btnTxt.length);
+          break;
+        }
+      }
+      
+      try {
+        await navigator.clipboard.writeText(codeText.trim());
+        const isVi = document.body.classList.contains('lang-vi');
+        button.textContent = isVi ? 'đã copy' : 'copied';
+        button.classList.add('copied');
+        setTimeout(() => {
+          updateBtnLabel();
+          button.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    });
+    
+    preBlock.appendChild(button);
+  });
+
+  // Smooth Scroll Spy observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('aside a').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('section, header, .section-anchor').forEach(section => observer.observe(section));
+});
+  </script>
 </body>
 </html>
