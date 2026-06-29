@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowLab Pro API Documentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-card: #1f2937;
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #8b5cf6;
+      --accent-gradient: linear-gradient(135deg, #a78bfa, #6366f1);
+      --accent-light: rgba(139, 92, 246, 0.15);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --font-sans: 'Inter', sans-serif;
+      --font-title: 'Outfit', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      width: 300px;
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-logo {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-gradient);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logo svg {
+      width: 14px;
+      height: 14px;
+      fill: #fff;
+    }
+
+    .brand-title {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-group {
+      margin-bottom: 24px;
+    }
+
+    .nav-title {
+      font-family: var(--font-title);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .nav-links {
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-bottom: 6px;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 8px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .nav-links a.active {
+      color: #fff;
+      background: var(--accent-gradient);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+    }
+
+    /* Main Content Area */
+    main {
+      margin-left: 300px;
+      flex: 1;
+      padding: 48px 64px;
+      max-width: 1000px;
+    }
+
+    header {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .meta-info {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-item strong {
+      color: var(--text-primary);
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 48px;
+      scroll-margin-top: 40px;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 600;
+      margin: 28px 0 12px 0;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    /* Callout Box / Tip */
+    .callout {
+      background-color: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 24px 0;
+    }
+
+    .callout-title {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 14px;
+    }
+
+    th {
+      background: rgba(0,0,0,0.1);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    tr:hover td {
+      background-color: rgba(255,255,255,0.02);
+    }
+
+    /* Code Blocks */
+    pre {
+      background: #1e1e1e;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      position: relative;
+      margin: 16px 0;
+      border: 1px solid #333;
+    }
+
+    pre code {
+      font-family: var(--font-mono);
+      color: #d4d4d4;
+      font-size: 13px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    /* Syntax Highlighting */
+    .token.keyword { color: #569cd6; }
+    .token.string { color: #ce9178; }
+    .token.function { color: #dcdcaa; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-post {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+    }
+
+    .badge-get {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: #3b82f6;
+    }
+
+    .badge-required {
+      background-color: rgba(239, 64, 64, 0.15);
+      color: var(--error);
+    }
+
+    .endpoint-box {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    /* Mobile Toggle */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      z-index: 1000;
+      font-size: 20px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 900px) {
+      aside {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      
+      aside.active {
+        transform: translateX(0);
+      }
+
+      main {
+        margin-left: 0;
+        padding: 32px 24px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    /* Language Toggle */
+    body.lang-vi .lang-en { display: none !important; }
+    body.lang-en .lang-vi { display: none !important; }
+    
+    /* Language Toggle Button styling */
+    .lang-toggle-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 1001;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-sans);
+    }
+    .lang-toggle-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body class="lang-vi">
+
+  <button class="menu-toggle">☰</button>
+  <button id="btnLangToggle" class="lang-toggle-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    <span class="lang-vi">English 🇬🇧</span>
+    <span class="lang-en">Tiếng Việt 🇻🇳</span>
+  </button>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/></svg>
+        </div>
+        <span class="brand-title">FlowLab Pro</span>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title"><span class="lang-vi">Khởi đầu</span><span class="lang-en">Getting Started</span></div>
+        <ul class="nav-links">
+          <li><a href="#intro" class="active"><span class="lang-vi">Giới thiệu</span><span class="lang-en">Introduction</span></a></li>
+          <li><a href="#auth"><span class="lang-vi">Kết nối & Xác thực</span><span class="lang-en">Connection & Auth</span></a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title"><span class="lang-vi">REST API Endpoints</span><span class="lang-en">REST API Endpoints</span></div>
+        <ul class="nav-links">
+          <li><a href="#model-guide"><span class="lang-vi">Tham số Model</span><span class="lang-en">Model Parameter</span></a></li>
+          <li><a href="#t2i">Text To Image</a></li>
+          <li><a href="#i2i">Image To Image</a></li>
+          <li><a href="#upscale-img">Upscale Image</a></li>
+          <li><a href="#t2v">Text To Video</a></li>
+          <li><a href="#i2v">Image To Video</a></li>
+          <li><a href="#start-end">Start & End Video</a></li>
+          <li><a href="#ref-video">Ref Images Video</a></li>
+          <li><a href="#edit-video">Edit Video</a></li>
+          <li><a href="#lipsync">Lipsync Video</a></li>
+          <li><a href="#upscale-vid">Upscale Video</a></li>
+          <li><a href="#character">Create Character</a></li>
+          <li><a href="#prop">Create Prop</a></li>
+          <li><a href="#location">Create Location</a></li>
+          <li><a href="#health">Health Check</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title"><span class="lang-vi">Tài nguyên & SDK</span><span class="lang-en">Resources & SDK</span></div>
+        <ul class="nav-links">
+          <li><a href="#voices"><span class="lang-vi">Giọng Nói Lipsync</span><span class="lang-en">Lipsync Voices</span></a></li>
+          <li><a href="#upload"><span class="lang-vi">API Upload thủ công</span><span class="lang-en">Manual Upload API</span></a></li>
+          <li><a href="#errors"><span class="lang-vi">Xử lý lỗi</span><span class="lang-en">Error Handling</span></a></li>
+          <li><a href="#sdk"><span class="lang-vi">Tích Hợp Client</span><span class="lang-en">Client SDK</span></a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+      <header id="intro">
+        <h1>
+          <span class="lang-vi">Hướng Dẫn Sử Dụng API FlowLab Pro</span>
+          <span class="lang-en">FlowLab Pro API Guide</span>
+        </h1>
+        <p>
+          <span class="lang-vi">Tài liệu hướng dẫn tích hợp, cấu hình và gọi các API của FlowLab Pro để tự động hóa quy trình tạo ảnh, video, lipsync, upscale và quản lý Assets.</span>
+          <span class="lang-en">Documentation for integrating, configuring, and calling FlowLab Pro APIs to automate image, video, lipsync, upscale, and asset management.</span>
+        </p>
+        <div class="meta-info">
+          <div class="meta-item">🌐 Endpoint: <strong>http://127.0.0.1:1241</strong></div>
+          <div class="meta-item">
+            <span class="lang-vi">⚡ Chế độ: <strong>Đồng bộ (Synchronous)</strong></span>
+            <span class="lang-en">⚡ Mode: <strong>Synchronous</strong></span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Section: Auth -->
+      <section id="auth">
+        <h2>
+          <span class="lang-vi">1. Hướng Dẫn Kết Nối & Xác Thực</span>
+          <span class="lang-en">1. Connection & Authentication Guide</span>
+        </h2>
+        <h3>
+          <span class="lang-vi">1.1 Khởi Chạy Kết Nối</span>
+          <span class="lang-en">1.1 Launching Connection</span>
+        </h3>
+        <ol>
+          <li>
+            <span class="lang-vi">Khởi chạy file <code>flowlab-local-helper.exe</code> (API Server sẽ chạy ngầm tại cổng <code>1241</code>).</span>
+            <span class="lang-en">Run the <code>flowlab-local-helper.exe</code> file (API Server will run in the background on port <code>1241</code>).</span>
+          </li>
+          <li>
+            <span class="lang-vi">Mở trình duyệt Chrome và truy cập trang Google Labs.</span>
+            <span class="lang-en">Open Chrome browser and navigate to Google Labs.</span>
+          </li>
+          <li>
+            <span class="lang-vi">Mở Sidebar UI của Extension FlowLab Pro.</span>
+            <span class="lang-en">Open the Sidebar UI of the FlowLab Pro Extension.</span>
+          </li>
+          <li>
+            <span class="lang-vi">Chấm tròn thứ 4 (<strong>API Server</strong>) tại phần header của Sidebar chuyển sang màu xanh lá cây báo hiệu kết nối thành công, hoặc mở <a href="http://127.0.0.1:1241/health" target="_blank" style="color:var(--accent);">http://127.0.0.1:1241/health</a> để kiểm tra.</span>
+            <span class="lang-en">The 4th status dot (<strong>API Server</strong>) in the Sidebar header turns green to indicate success, or visit <a href="http://127.0.0.1:1241/health" target="_blank" style="color:var(--accent);">http://127.0.0.1:1241/health</a> to check.</span>
+          </li>
+        </ol>
+
+        <h3>
+          <span class="lang-vi">1.2 Headers Xác Thực Bắt Buộc</span>
+          <span class="lang-en">1.2 Required Authentication Headers</span>
+        </h3>
+        <p>
+          <span class="lang-vi">Mọi yêu cầu gửi tới REST API (ngoại trừ <code>/health</code>) đều yêu cầu đính kèm các header sau:</span>
+          <span class="lang-en">All requests sent to the REST API (except <code>/health</code>) must include the following headers:</span>
+        </p>
+        <pre><code>Content-Type: application/json
+Authorization: Bearer &lt;YOUR_API_KEY&gt;</code></pre>
+      </section>
+
+      <!-- Section: REST API -->
+      <section id="rest-endpoints">
+        <h2>
+          <span class="lang-vi">2. Các REST API Đồng Bộ Hoàn Toàn Với Extension</span>
+          <span class="lang-en">2. REST APIs Fully Synchronous with Extension</span>
+        </h2>
+        
+        <div class="callout">
+          <div class="callout-title">
+            <span class="lang-vi">💡 Mẹo tích hợp & Auto-Upload</span>
+            <span class="lang-en">💡 Integration & Auto-Upload Tips</span>
+          </div>
+          <p>
+            <strong><span class="lang-vi">Truyền URL trực tiếp:</span><span class="lang-en">Direct URL:</span></strong>
+            <span class="lang-vi"> Có thể truyền thẳng liên kết HTTP/HTTPS của ảnh/video từ Internet làm tham số đầu vào. Server sẽ tự động tải xuống và upload lên Google Labs.</span>
+            <span class="lang-en"> You can directly pass HTTP/HTTPS URLs of images/videos. The server will download and upload them automatically.</span>
+          </p>
+          <p>
+            <strong><span class="lang-vi">Tự động lưu offline:</span><span class="lang-en">Auto-save offline:</span></strong>
+            <span class="lang-vi"> Tác vụ thành công sẽ được tự động tải về thư mục <code>local-helper/downloads/</code>.</span>
+            <span class="lang-en"> Successful tasks will be automatically downloaded to the <code>local-helper/downloads/</code> directory.</span>
+          </p>
+          <p>
+            <strong><span class="lang-vi">Tham số Bắt buộc:</span><span class="lang-en">Required Parameters:</span></strong>
+            <span class="lang-vi"> Vui lòng điền đầy đủ các tham số để đảm bảo API hoạt động ổn định và chính xác.</span>
+            <span class="lang-en"> Please fill in all parameters to ensure stable and accurate API operations.</span>
+          </p>
+        </div>
+
+        <!-- Model Guide -->
+        <div id="model-guide" class="section-anchor" style="scroll-margin-top: 40px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3>
+            <span class="lang-vi">2.0 Hướng Dẫn Tham Số Model Tùy Chọn</span>
+            <span class="lang-en">2.0 Optional Model Parameter Guide</span>
+          </h3>
+          <p style="margin-top: 12px;">
+            <span class="lang-vi">Đối với tất cả các API tạo ảnh, video, lipsync, và asset (Character, Prop, Location), bạn có thể gửi kèm thuộc tính <code>"model"</code> (kiểu String, tùy chọn) trong request body để chỉ định mô hình sử dụng. Nếu không truyền, hệ thống sẽ sử dụng mô hình được thiết lập trên Extension Sidebar.</span>
+            <span class="lang-en">For all image, video, lipsync, and asset APIs, you can optionally include the <code>"model"</code> parameter in the request body to force generation with a specific model. If omitted, the default model configured in the Extension Settings will be used.</span>
+          </p>
+          
+          <h4 style="margin: 20px 0 8px 0; color: var(--text-primary); font-size: 15px;">
+            <span class="lang-vi">1. Các Mô Hình Hình Ảnh Hỗ Trợ (Image Models)</span>
+            <span class="lang-en">1. Supported Image Models</span>
+          </h4>
+          <ul style="margin-left: 20px; margin-bottom: 16px;">
+            <li><code>"gem_pix_2"</code>: <span class="lang-vi">Nano Banana Pro (Ánh xạ: <code>GEM_PIX_2</code>)</span><span class="lang-en">Nano Banana Pro (Map to: <code>GEM_PIX_2</code>)</span></li>
+            <li><code>"narwhal"</code>: <span class="lang-vi">Nano Banana 2 (Ánh xạ: <code>NARWHAL</code>)</span><span class="lang-en">Nano Banana 2 (Map to: <code>NARWHAL</code>)</span></li>
+            <li><code>"imagen4"</code>: <span class="lang-vi">Imagen 3.5 (Ánh xạ: <code>IMAGEN_3_5</code>)</span><span class="lang-en">Imagen 3.5 (Map to: <code>IMAGEN_3_5</code>)</span></li>
+          </ul>
+
+          <h4 style="margin: 20px 0 8px 0; color: var(--text-primary); font-size: 15px;">
+            <span class="lang-vi">2. Các Mô Hình Video Hỗ Trợ (Video Models) - Khóa Rút Gọn</span>
+            <span class="lang-en">2. Supported Video Models - Shorthand Keys</span>
+          </h4>
+          <p style="font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);">
+            <span class="lang-vi">Hệ thống tự động map theo tỉ lệ và cấp độ tài khoản (Pro/Ultra):</span>
+            <span class="lang-en">The system auto-resolves according to aspect ratio and account tier (Pro/Ultra):</span>
+          </p>
+          <ul style="margin-left: 20px; margin-bottom: 16px;">
+            <li><code>"lower"</code> (hoặc <code>"lower_priority"</code>, <code>"lite_low_priority"</code>): <span class="lang-vi">Veo 3.1 - Lite [Lower Priority]</span><span class="lang-en">Veo 3.1 - Lite [Lower Priority]</span></li>
+            <li><code>"lite"</code>: <span class="lang-vi">Veo 3.1 - Lite</span><span class="lang-en">Veo 3.1 - Lite</span></li>
+            <li><code>"fast"</code>: <span class="lang-vi">Veo 3.1 - Fast</span><span class="lang-en">Veo 3.1 - Fast</span></li>
+            <li><code>"quality"</code>: <span class="lang-vi">Veo 3.1 - Quality</span><span class="lang-en">Veo 3.1 - Quality</span></li>
+          </ul>
+
+          <h4 style="margin: 20px 0 8px 0; color: var(--text-primary); font-size: 15px;">
+            <span class="lang-vi">3. Chỉnh sửa Video (Edit Video)</span>
+            <span class="lang-en">3. Edit Video</span>
+          </h4>
+          <ul style="margin-left: 20px;">
+            <li><code>"abra_edit"</code>: <span class="lang-vi">Mô hình chỉnh sửa video mặc định của Omni Flash</span><span class="lang-en">Default video editing model for Omni Flash</span></li>
+          </ul>
+        </div>
+
+        <!-- T2I -->
+        <div id="t2i" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Text To Image (<span class="lang-vi">Tạo ảnh từ văn bản</span><span class="lang-en">Generate image from text</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/text-to-image</span>
+          </div>
+          <p>
+            <span class="lang-vi">Tạo ảnh nghệ thuật mới dựa trên mô tả văn bản.</span>
+            <span class="lang-en">Create a new artwork based on a text prompt.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả chi tiết bức ảnh cần sinh ra.</span>
+                  <span class="lang-en">Detailed description of the image to generate.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ ảnh. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                  <span class="lang-en">Image aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo ảnh cụ thể (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                  <span class="lang-en">Specific image model (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/text-to-image \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"A futuristic city in the style of cyberpunk\", \"aspectRatio\": \"16:9\", \"model\": \"gem_pix_2\"}"</code></pre>
+        </div>
+
+        <!-- I2I -->
+        <div id="i2i" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Image To Image (<span class="lang-vi">Tạo ảnh từ ảnh tham chiếu</span><span class="lang-en">Image to image reference</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/image-to-image</span>
+          </div>
+          <p>
+            <span class="lang-vi">Biến đổi hoặc chỉnh sửa ảnh dựa trên ảnh gốc và prompt.</span>
+            <span class="lang-en">Transform or edit an image based on a source image and a prompt.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả các chỉnh sửa hoặc style biến đổi.</span>
+                  <span class="lang-en">Description of requested edits or style transformations.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaIds</td>
+                <td>Array</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mảng chứa URL ảnh trực tiếp hoặc mã ID ảnh.</span>
+                  <span class="lang-en">Array containing direct image URLs or image IDs.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ ảnh. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                  <span class="lang-en">Image aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo ảnh cụ thể (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                  <span class="lang-en">Specific image model (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/image-to-image \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"Convert this image into a pencil sketch art style\", \"mediaIds\": [\"https://example.com/product-tshirt.jpg\"], \"aspectRatio\": \"1:1\", \"model\": \"narwhal\"}"</code></pre>
+        </div>
+
+        <!-- Upscale Image -->
+        <div id="upscale-img" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Upscale Image (<span class="lang-vi">Nâng cấp độ phân giải ảnh</span><span class="lang-en">Upscale Image</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/upscale-image</span>
+          </div>
+          <p>
+            <span class="lang-vi">Nâng cấp chất lượng ảnh lên độ phân giải 2K hoặc 4K.</span>
+            <span class="lang-en">Enhance image quality to 2K or 4K resolution.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mã ID ảnh thô cần nâng cấp. <strong>Chỉ nhận ID thô (mediaId), không nhận URL hay file.</strong></span>
+                  <span class="lang-en">Raw image ID to upscale. <strong>Only accepts raw ID (mediaId), does not accept URL or file.</strong></span>
+                </td>
+              </tr>
+              <tr>
+                <td>resolution</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Độ phân giải đích. Giá trị hợp lệ: <code>"2K"</code> hoặc <code>"4K"</code>.</span>
+                  <span class="lang-en">Target resolution. Valid values: <code>"2K"</code> or <code>"4K"</code>.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/upscale-image \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"mediaId\": \"abc-123-image-id\", \"resolution\": \"2K\"}"</code></pre>
+        </div>
+
+        <!-- T2V -->
+        <div id="t2v" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Text To Video (<span class="lang-vi">Tạo video từ văn bản</span><span class="lang-en">Generate video from text</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/text-to-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Tạo phân cảnh video ngắn dựa trên mô tả văn bản.</span>
+            <span class="lang-en">Create a short video scene based on a text prompt.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả hành động của video.</span>
+                  <span class="lang-en">Description of the video action.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ video. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                  <span class="lang-en">Video aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>duration</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Thời lượng video. Tùy chọn, mặc định là <code>"8s"</code>.</span>
+                  <span class="lang-en">Video duration. Optional, default is <code>"8s"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo video cụ thể (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> hoặc khóa model đầy đủ).</span>
+                  <span class="lang-en">Specific video model (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> or raw model key).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/text-to-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"Slow motion of a drop falling into water, ripples, highly detailed\", \"aspectRatio\": \"16:9\", \"duration\": \"8s\", \"model\": \"fast\"}"</code></pre>
+        </div>
+
+        <!-- I2V -->
+        <div id="i2v" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Image To Video (<span class="lang-vi">Tạo video từ ảnh bắt đầu</span><span class="lang-en">Generate video from image</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/image-to-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Sinh chuyển động bắt đầu từ một hình ảnh tĩnh.</span>
+            <span class="lang-en">Generate motion starting from a static image.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả chuyển động cần tạo.</span>
+                  <span class="lang-en">Description of motion to generate.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL hoặc ID ảnh tĩnh bắt đầu.</span>
+                  <span class="lang-en">URL or ID of the starting static image.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ video. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                  <span class="lang-en">Video aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>duration</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Thời lượng video. Tùy chọn, mặc định là <code>"8s"</code>.</span>
+                  <span class="lang-en">Video duration. Optional, default is <code>"8s"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo video cụ thể (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> hoặc khóa model đầy đủ).</span>
+                  <span class="lang-en">Specific video model (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> or raw model key).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/image-to-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"Make the wind blow through the hair of the woman in the image\", \"mediaId\": \"https://example.com/portrait.png\", \"aspectRatio\": \"9:16\", \"duration\": \"8s\", \"model\": \"quality\"}"</code></pre>
+        </div>
+
+        <!-- Start End -->
+        <div id="start-end" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Start & End Image To Video (<span class="lang-vi">Tạo video giữa hai ảnh</span><span class="lang-en">Generate video between two images</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/start-end-to-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Tạo chuyển động kết nối mượt mà từ ảnh bắt đầu tới ảnh kết thúc.</span>
+            <span class="lang-en">Create a smooth transition between a start image and an end image.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả chuyển tiếp/biến đổi.</span>
+                  <span class="lang-en">Description of transition/transformation.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>startMediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL hoặc ID ảnh tĩnh bắt đầu.</span>
+                  <span class="lang-en">URL or ID of the starting static image.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>endMediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL hoặc ID ảnh tĩnh kết thúc.</span>
+                  <span class="lang-en">URL or ID of the ending static image.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ video. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                  <span class="lang-en">Video aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>duration</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Thời lượng video. Tùy chọn, mặc định là <code>"8s"</code>.</span>
+                  <span class="lang-en">Video duration. Optional, default is <code>"8s"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo video cụ thể (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> hoặc khóa model đầy đủ).</span>
+                  <span class="lang-en">Specific video model (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> or raw model key).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/start-end-to-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"A clean empty coffee cup gradually fills up with hot coffee\", \"startMediaId\": \"https://example.com/empty-cup.png\", \"endMediaId\": \"https://example.com/filled-cup.png\", \"aspectRatio\": \"16:9\", \"duration\": \"8s\", \"model\": \"lite\"}"</code></pre>
+        </div>
+
+        <!-- Ref Images -->
+        <div id="ref-video" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Reference Images To Video (<span class="lang-vi">Tạo video từ nhiều ảnh tham chiếu</span><span class="lang-en">Generate video from reference images</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/ref-image-to-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Tạo video giữ nguyên tính nhất quán của đối tượng/phong cách từ các ảnh tham chiếu.</span>
+            <span class="lang-en">Create a video while maintaining subject/style consistency using reference images.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả hành động của đối tượng.</span>
+                  <span class="lang-en">Description of subject action.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaIds</td>
+                <td>Array</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Danh sách URL ảnh hoặc ID ảnh tham chiếu.</span>
+                  <span class="lang-en">List of image URLs or reference image IDs.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ video. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                  <span class="lang-en">Video aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>duration</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Thời lượng video. Tùy chọn, mặc định là <code>"8s"</code>.</span>
+                  <span class="lang-en">Video duration. Optional, default is <code>"8s"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo video cụ thể (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> hoặc khóa model đầy đủ).</span>
+                  <span class="lang-en">Specific video model (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> or raw model key).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/ref-image-to-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"A model wearing this costume talking directly to the camera\", \"mediaIds\": [\"https://example.com/model-costume.jpg\"], \"aspectRatio\": \"9:16\", \"duration\": \"8s\", \"model\": \"fast\"}"</code></pre>
+        </div>
+
+        <!-- Edit Video -->
+        <div id="edit-video" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Edit Video (<span class="lang-vi">Chỉnh sửa video bằng mô hình Omni Flash</span><span class="lang-en">Edit video with Omni Flash</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/edit-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Chỉnh sửa các yếu tố/bối cảnh trong một video có sẵn (dưới 10 giây).</span>
+            <span class="lang-en">Edit elements/context in an existing video (under 10 seconds).</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL hoặc ID video gốc cần chỉnh sửa. <strong>Chỉ nhận video, không nhận hình ảnh.</strong></span>
+                  <span class="lang-en">URL or ID of the source video to edit. <strong>Only accepts video, not image.</strong></span>
+                </td>
+              </tr>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả các chỉnh sửa hoặc style biến đổi cần áp dụng.</span>
+                  <span class="lang-en">Description of the edits or style transformations to apply.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình chỉnh sửa video cụ thể (Mặc định: <code>"abra_edit"</code>).</span>
+                  <span class="lang-en">Specific video editing model (Default: <code>"abra_edit"</code>).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/edit-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"prompt\": \"Change the background to a snow storm\", \"mediaId\": \"https://example.com/original_video.mp4\", \"model\": \"abra_edit\"}"</code></pre>
+        </div>
+
+        <!-- Lipsync -->
+        <div id="lipsync" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Lipsync Video (<span class="lang-vi">Đồng bộ cử động môi theo giọng nói</span><span class="lang-en">Lipsync Video</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/lipsync-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Đồng bộ chuyển động miệng của nhân vật trong ảnh khớp với tệp âm thanh/giọng nói.</span>
+            <span class="lang-en">Synchronize character mouth movements in an image with a speech/audio file.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>audioId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">ID giọng nói được chọn để đồng bộ khẩu hình (Xem danh sách ở mục 3).</span>
+                  <span class="lang-en">ID of the selected voice for lip-sync (See list in section 3).</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaIds</td>
+                <td>Array</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mảng chứa URL ảnh trực tiếp hoặc ID ảnh chân dung nhân vật cần nói.</span>
+                  <span class="lang-en">Array containing direct image URLs or portrait image IDs of the character.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả cảm xúc hoặc bối cảnh biểu diễn.</span>
+                  <span class="lang-en">Description of emotions or performance context.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ video. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                  <span class="lang-en">Video aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>duration</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Thời lượng video. Tùy chọn, mặc định là <code>"8s"</code>.</span>
+                  <span class="lang-en">Video duration. Optional, default is <code>"8s"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo video khẩu hình (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> hoặc khóa model đầy đủ).</span>
+                  <span class="lang-en">Specific video model (<code>"lower"</code>, <code>"lite"</code>, <code>"fast"</code>, <code>"quality"</code> or raw model key).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/lipsync-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"audioId\": \"puck\", \"mediaIds\": [\"https://example.com/avatar-portrait.png\"], \"prompt\": \"A friendly host speaking in a warm studio setup\", \"aspectRatio\": \"16:9\", \"duration\": \"8s\", \"model\": \"lite\"}"</code></pre>
+        </div>
+
+        <!-- Upscale Video -->
+        <div id="upscale-vid" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Upscale Video (<span class="lang-vi">Nâng cấp độ phân giải video</span><span class="lang-en">Upscale Video</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/upscale-video</span>
+          </div>
+          <p>
+            <span class="lang-vi">Nâng cấp độ phân giải video đầu ra lên chất lượng 1080p hoặc 4K.</span>
+            <span class="lang-en">Upgrade output video resolution to 1080p or 4K.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mã ID video thô cần nâng cấp. <strong>Chỉ nhận ID thô (mediaId), không nhận URL hay tệp tin.</strong></span>
+                  <span class="lang-en">Raw video ID to upscale. <strong>Only accepts raw ID (mediaId), does not accept URL or file.</strong></span>
+                </td>
+              </tr>
+              <tr>
+                <td>resolution</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Độ phân giải đích. Giá trị hợp lệ: <code>"1080p"</code> hoặc <code>"4K"</code>.</span>
+                  <span class="lang-en">Target resolution. Valid values: <code>"1080p"</code> or <code>"4K"</code>.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/upscale-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"mediaId\": \"xyz-789-video-id\", \"resolution\": \"1080p\"}"</code></pre>
+        </div>
+
+        <!-- Create Character -->
+        <div id="character" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Create Character (<span class="lang-vi">Tạo nhân vật - Có voice hoặc Không voice</span><span class="lang-en">Create Character - Voice / No Voice</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/create-character</span>
+          </div>
+          <p>
+            <span class="lang-vi">Khởi tạo một thực thể nhân vật nhất quán trong Google Labs Flow.</span>
+            <span class="lang-en">Initialize a consistent character entity in Google Labs Flow.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>displayName</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tên hiển thị của nhân vật.</span>
+                  <span class="lang-en">Display name of the character.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>personalityNotes</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả thông tin/tính cách của nhân vật.</span>
+                  <span class="lang-en">Description of the character's personality/traits.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>presetVoiceId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">ID giọng nói đặc trưng. Nếu truyền <code>"none"</code>, hệ thống sẽ tạo Nhân vật Không có giọng nói (chỉ tạo hình ảnh).</span>
+                  <span class="lang-en">Selected voice ID. If <code>"none"</code> is passed, it creates a Character without voice (image only).</span>
+                </td>
+              </tr>
+              <tr>
+                <td>imagePrompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả văn bản để sinh ảnh chân dung mới cho nhân vật. (Truyền chuỗi rỗng <code>""</code> nếu sử dụng mediaId).</span>
+                  <span class="lang-en">Text prompt to generate a new character portrait. (Pass empty string <code>""</code> if using mediaId).</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL hoặc ID ảnh chân dung nhân vật có sẵn. (Truyền chuỗi rỗng <code>""</code> nếu sử dụng imagePrompt).</span>
+                  <span class="lang-en">URL or ID of an existing character portrait. (Pass empty string <code>""</code> if using imagePrompt).</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ ảnh chân dung. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                  <span class="lang-en">Portrait aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo ảnh cụ thể cho nhân vật (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                  <span class="lang-en">Specific image model for character (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/create-character \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"displayName\": \"Trợ lý ảo VN\", \"personalityNotes\": \"Thông minh, vui vẻ\", \"presetVoiceId\": \"zephyr\", \"imagePrompt\": \"A friendly Vietnamese female assistant portrait, professional look\", \"mediaId\": \"\", \"aspectRatio\": \"9:16\", \"model\": \"gem_pix_2\"}"</code></pre>
+        </div>
+
+        <!-- Create Prop -->
+        <div id="prop" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Create Prop (<span class="lang-vi">Tạo Đạo Cụ</span><span class="lang-en">Create Prop</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/create-prop</span>
+          </div>
+          <p>
+            <span class="lang-vi">Tạo ảnh đại diện và lưu tên đạo cụ làm tài sản tái sử dụng.</span>
+            <span class="lang-en">Create prop avatar and save prop name as a reusable asset.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>displayName</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tên đạo cụ cần tạo.</span>
+                  <span class="lang-en">Display name of the prop.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả văn bản để sinh ảnh đạo cụ.</span>
+                  <span class="lang-en">Text prompt to generate the prop image.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL/ID ảnh tham chiếu (Truyền chuỗi rỗng <code>""</code> nếu chỉ dùng Text to Image).</span>
+                  <span class="lang-en">URL/ID of reference image (Pass empty string <code>""</code> if using Text to Image only).</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ ảnh đạo cụ. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                  <span class="lang-en">Prop image aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo ảnh cụ thể cho đạo cụ (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                  <span class="lang-en">Specific image model for prop (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/create-prop \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"displayName\": \"Chiếc cốc thần kỳ\", \"prompt\": \"A shiny glowing golden cup decorated with emeralds\", \"mediaId\": \"\", \"aspectRatio\": \"1:1\", \"model\": \"gem_pix_2\"}"</code></pre>
+        </div>
+
+        <!-- Create Location -->
+        <div id="location" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3>Create Location (<span class="lang-vi">Tạo Địa Điểm</span><span class="lang-en">Create Location</span>)</h3>
+          <div class="endpoint-box">
+            <span class="badge badge-post">POST</span>
+            <span>/api/create-location</span>
+          </div>
+          <p>
+            <span class="lang-vi">Tạo ảnh đại diện và lưu tên bối cảnh địa điểm làm tài sản tái sử dụng.</span>
+            <span class="lang-en">Create location avatar and save scene name as a reusable asset.</span>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+                <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+                <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+                <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>displayName</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tên địa điểm/bối cảnh cần tạo.</span>
+                  <span class="lang-en">Display name of the location/scene.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>prompt</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô tả văn bản để sinh ảnh bối cảnh.</span>
+                  <span class="lang-en">Text prompt to generate the scene image.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>mediaId</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">URL/ID ảnh tham chiếu bối cảnh (Truyền chuỗi rỗng <code>""</code> nếu chỉ dùng Text to Image).</span>
+                  <span class="lang-en">URL/ID of the scene reference image (Pass empty string <code>""</code> if using Text to Image only).</span>
+                </td>
+              </tr>
+              <tr>
+                <td>aspectRatio</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+                <td>
+                  <span class="lang-vi">Tỉ lệ ảnh địa điểm. Giá trị hợp lệ: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                  <span class="lang-en">Location image aspect ratio. Valid values: <code>"9:16"</code>, <code>"16:9"</code>, <code>"1:1"</code>, <code>"4:3"</code>, <code>"3:4"</code>.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>model</td>
+                <td>String</td>
+                <td><span class="lang-vi"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Tùy chọn</span></span><span class="lang-en"><span class="badge" style="background-color:rgba(156,163,175,0.15);color:var(--text-secondary);">Optional</span></span></td>
+                <td>
+                  <span class="lang-vi">Mô hình tạo ảnh cụ thể cho địa điểm (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                  <span class="lang-en">Specific image model for location (<code>"gem_pix_2"</code>, <code>"narwhal"</code>, <code>"imagen4"</code>).</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X POST http://127.0.0.1:1241/api/create-location \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"displayName\": \"Khu rừng băng giá\", \"prompt\": \"A beautiful frozen fantasy forest with glowing blue crystals under moonlight\", \"mediaId\": \"\", \"aspectRatio\": \"16:9\", \"model\": \"gem_pix_2\"}"</code></pre>
+        </div>
+
+        <!-- Health Check -->
+        <div id="health" class="section-anchor" style="scroll-margin-top: 40px;">
+          <h3><span class="lang-vi">Kiểm Tra Trạng Thái Hệ Thống (Health Check)</span><span class="lang-en">System Connection Check (Health Check)</span></h3>
+          <div class="endpoint-box">
+            <span class="badge badge-get">GET</span>
+            <span>/health</span>
+          </div>
+          <p>
+            <span class="lang-vi">Kiểm tra trạng thái kết nối giữa Helper và Extension.</span>
+            <span class="lang-en">Verify the connection status between Helper and Extension.</span>
+          </p>
+          <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+          <pre><code>curl -X GET http://127.0.0.1:1241/health</code></pre>
+        </div>
+      </section>
+
+      <!-- Section: Voices -->
+      <section id="voices">
+        <h2>
+          <span class="lang-vi">3. Danh Sách Giọng Nói Hỗ Trợ Lipsync</span>
+          <span class="lang-en">3. Supported Lipsync Voices List</span>
+        </h2>
+        <p>
+          <span class="lang-vi">Chọn đúng <code>audioId</code> khi sinh Lipsync hoặc các tác vụ nhân vật có thoại. Dưới đây là danh sách đầy đủ 30 giọng nói được hỗ trợ chính thức:</span>
+          <span class="lang-en">Choose the correct <code>audioId</code> when generating Lipsync or character dialogues. Below is the complete list of 30 officially supported voices:</span>
+        </p>
+        
+        <h3>
+          <span class="lang-vi">Giọng Nam (17 Giọng Nam)</span>
+          <span class="lang-en">Male Voices (17 Voices)</span>
+        </h3>
+        <table>
+          <thead>
+            <tr>
+              <th><span class="lang-vi">STT</span><span class="lang-en">No.</span></th>
+              <th><code>audioId</code></th>
+              <th><span class="lang-vi">Đặc điểm giọng nói (English)</span><span class="lang-en">Voice characteristics (English)</span></th>
+              <th><span class="lang-vi">Đặc điểm diễn đạt (Tiếng Việt)</span><span class="lang-en">Expression style (Vietnamese)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><code>puck</code></td><td>Upbeat, Middle pitch</td><td>Sôi nổi, Cao độ trung bình</td></tr>
+            <tr><td>2</td><td><code>charon</code></td><td>Informative, Lower pitch</td><td>Rõ ràng dạng tin tức, Cao độ thấp</td></tr>
+            <tr><td>3</td><td><code>fenrir</code></td><td>Excitable, Lower middle pitch</td><td>Dễ kích động, Cao độ trung bình thấp</td></tr>
+            <tr><td>4</td><td><code>orus</code></td><td>Firm, Lower middle pitch</td><td>Dứt khoát, Cao độ trung bình thấp</td></tr>
+            <tr><td>5</td><td><code>enceladus</code></td><td>Breathy, Lower pitch</td><td>Nhiều hơi/Thì thầm, Cao độ thấp</td></tr>
+            <tr><td>6</td><td><code>iapetus</code></td><td>Clear, Lower middle pitch</td><td>Trực quan rõ ràng, Cao độ trung bình thấp</td></tr>
+            <tr><td>7</td><td><code>umbriel</code></td><td>Easy-going, Lower middle pitch</td><td>Tự nhiên dễ chịu, Cao độ trung bình thấp</td></tr>
+            <tr><td>8</td><td><code>algenib</code></td><td>Gravelly, Lower pitch</td><td>Khàn đặc biệt, Cao độ thấp</td></tr>
+            <tr><td>9</td><td><code>algieba</code></td><td>Smooth, Lower pitch</td><td>Mượt mà ấm áp, Cao độ thấp</td></tr>
+            <tr><td>10</td><td><code>rasalgethi</code></td><td>Informative, Middle pitch</td><td>Nhiều thông tin, Cao độ trung bình</td></tr>
+            <tr><td>11</td><td><code>alnilam</code></td><td>Firm, Lower middle pitch</td><td>Dứt khoát/Trang trọng, Cao độ trung bình thấp</td></tr>
+            <tr><td>12</td><td><code>schedar</code></td><td>Even, Lower middle pitch</td><td>Đều đặn ổn định, Cao độ trung bình thấp</td></tr>
+            <tr><td>13</td><td><code>pulcherrima</code></td><td>Forward, Middle pitch</td><td>Hướng ngoại/Rõ nét, Cao độ trung bình</td></tr>
+            <tr><td>14</td><td><code>achird</code></td><td>Friendly, Lower middle pitch</td><td>Thân thiện/Cởi mở, Cao độ trung bình thấp</td></tr>
+            <tr><td>15</td><td><code>zubenelgenubi</code></td><td>Casual, Lower middle pitch</td><td>Thường nhật/Tự nhiên, Cao độ trung bình thấp</td></tr>
+            <tr><td>16</td><td><code>sadachbia</code></td><td>Lively, Lower pitch</td><td>Sinh động hoạt bát, Cao độ thấp</td></tr>
+            <tr><td>17</td><td><code>sadaltager</code></td><td>Knowledgeable, Middle pitch</td><td>Hiểu biết/Uyên bác, Cao độ trung bình</td></tr>
+          </tbody>
+        </table>
+
+        <h3>
+          <span class="lang-vi">Giọng Nữ (13 Giọng Nữ)</span>
+          <span class="lang-en">Female Voices (13 Voices)</span>
+        </h3>
+        <table>
+          <thead>
+            <tr>
+              <th><span class="lang-vi">STT</span><span class="lang-en">No.</span></th>
+              <th><code>audioId</code></th>
+              <th><span class="lang-vi">Đặc điểm giọng nói (English)</span><span class="lang-en">Voice characteristics (English)</span></th>
+              <th><span class="lang-vi">Đặc điểm diễn đạt (Tiếng Việt)</span><span class="lang-en">Expression style (Vietnamese)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><code>zephyr</code></td><td>Bright, Higher pitch</td><td>Sáng sủa, Cao độ cao</td></tr>
+            <tr><td>2</td><td><code>kore</code></td><td>Firm, Middle pitch</td><td>Dứt khoát/Mạnh mẽ, Cao độ trung bình</td></tr>
+            <tr><td>3</td><td><code>leda</code></td><td>Youthful, Higher pitch</td><td>Trẻ trung/Vui vẻ, Cao độ cao</td></tr>
+            <tr><td>4</td><td><code>aoede</code></td><td>Breezy, Middle pitch</td><td>Nhẹ nhàng bay bổng, Cao độ trung bình</td></tr>
+            <tr><td>5</td><td><code>callirrhoe</code></td><td>Easy-going, Middle pitch</td><td>Dễ chịu tự nhiên, Cao độ trung bình</td></tr>
+            <tr><td>6</td><td><code>autonoe</code></td><td>Bright, Middle pitch</td><td>Sáng sủa ấm áp, Cao độ trung bình</td></tr>
+            <tr><td>7</td><td><code>despina</code></td><td>Smooth, Middle pitch</td><td>Mượt mà uyển chuyển, Cao độ trung bình</td></tr>
+            <tr><td>8</td><td><code>erinome</code></td><td>Clear, Middle pitch</td><td>Rõ ràng/Trong trẻo, Cao độ trung bình</td></tr>
+            <tr><td>9</td><td><code>laomedeia</code></td><td>Upbeat, Higher pitch</td><td>Sôi nổi cuốn hút, Cao độ cao</td></tr>
+            <tr><td>10</td><td><code>achernar</code></td><td>Soft, Higher pitch</td><td>Dịu dàng ấm áp, Cao độ cao</td></tr>
+            <tr><td>11</td><td><code>gacrux</code></td><td>Mature, Middle pitch</td><td>Trưởng thành/Chững chạc, Cao độ trung bình</td></tr>
+            <tr><td>12</td><td><code>vindemiatrix</code></td><td>Gentle, Middle pitch</td><td>Nhẹ nhàng/Truyền cảm, Cao độ trung bình</td></tr>
+            <tr><td>13</td><td><code>sulafat</code></td><td>Warm, Middle pitch</td><td>Ấm áp/Tin cậy, Cao độ trung bình</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section: Upload -->
+      <section id="upload">
+        <h2>
+          <span class="lang-vi">4. Các API Upload Media Thủ Công</span>
+          <span class="lang-en">4. Manual Media Upload APIs</span>
+        </h2>
+        <p>
+          <span class="lang-vi">Cho phép upload file binary từ local client dạng base64 lên Google Labs.</span>
+          <span class="lang-en">Allows uploading local client binary files as base64 to Google Labs.</span>
+        </p>
+        
+        <div class="endpoint-box">
+          <span class="badge badge-post">POST</span>
+          <span>/api/upload-image</span>
+        </div>
+        <p>
+          <span class="lang-vi">Upload file hình ảnh tĩnh.</span>
+          <span class="lang-en">Upload a static image file.</span>
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+              <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+              <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+              <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>url</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">URL ảnh từ internet. (Truyền chuỗi rỗng <code>""</code> nếu sử dụng base64).</span>
+                <span class="lang-en">Image URL from the internet. (Pass empty string <code>""</code> if using base64).</span>
+              </td>
+            </tr>
+            <tr>
+              <td>base64</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">Chuỗi base64 của ảnh cần upload. (Truyền chuỗi rỗng <code>""</code> nếu sử dụng url).</span>
+                <span class="lang-en">Base64 string of the image. (Pass empty string <code>""</code> if using url).</span>
+              </td>
+            </tr>
+            <tr>
+              <td>fileName</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">Tên file ảnh (ví dụ: <code>"image.png"</code>).</span>
+                <span class="lang-en">Image file name (e.g., <code>"image.png"</code>).</span>
+              </td>
+            </tr>
+            <tr>
+              <td>mimeType</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">Kiểu mime file ảnh (ví dụ: <code>"image/png"</code>).</span>
+                <span class="lang-en">Image mime type (e.g., <code>"image/png"</code>).</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+        <pre><code>curl -X POST http://127.0.0.1:1241/api/upload-image \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"url\": \"https://example.com/product-tshirt.jpg\", \"base64\": \"\", \"fileName\": \"tshirt.png\", \"mimeType\": \"image/png\"}"</code></pre>
+
+        <div class="endpoint-box">
+          <span class="badge badge-post">POST</span>
+          <span>/api/upload-video</span>
+        </div>
+        <p>
+          <span class="lang-vi">API Upload Video hỗ trợ phân khúc (chunks 2MB) chạy ngầm nên chịu được tệp tin video dung lượng lớn mà không bị nghẽn mạng.</span>
+          <span class="lang-en">Video Upload API supports background chunking (2MB chunks) to handle large video files without network throttling.</span>
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th><span class="lang-vi">Tham số</span><span class="lang-en">Parameter</span></th>
+              <th><span class="lang-vi">Kiểu</span><span class="lang-en">Type</span></th>
+              <th><span class="lang-vi">Yêu cầu</span><span class="lang-en">Requirement</span></th>
+              <th><span class="lang-vi">Mô tả</span><span class="lang-en">Description</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>url</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">URL video từ internet. (Truyền chuỗi rỗng <code>""</code> nếu sử dụng base64).</span>
+                <span class="lang-en">Video URL from the internet. (Pass empty string <code>""</code> if using base64).</span>
+              </td>
+            </tr>
+            <tr>
+              <td>base64</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">Chuỗi base64 của video cần upload. (Truyền chuỗi rỗng <code>""</code> nếu sử dụng url).</span>
+                <span class="lang-en">Base64 string of the video. (Pass empty string <code>""</code> if using url).</span>
+              </td>
+            </tr>
+            <tr>
+              <td>fileName</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">Tên file video (ví dụ: <code>"video.mp4"</code>).</span>
+                <span class="lang-en">Video file name (e.g., <code>"video.mp4"</code>).</span>
+              </td>
+            </tr>
+            <tr>
+              <td>mimeType</td>
+              <td>String</td>
+              <td><span class="lang-vi"><span class="badge badge-required">Bắt buộc</span></span><span class="lang-en"><span class="badge badge-required">Required</span></span></td>
+              <td>
+                <span class="lang-vi">Kiểu mime file video (ví dụ: <code>"video/mp4"</code>).</span>
+                <span class="lang-en">Video mime type (e.g., <code>"video/mp4"</code>).</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong><span class="lang-vi">Ví dụ cURL:</span><span class="lang-en">cURL Example:</span></strong></p>
+        <pre><code>curl -X POST http://127.0.0.1:1241/api/upload-video \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;YOUR_API_KEY&gt;" \
+  -d "{\"url\": \"\", \"base64\": \"&lt;chuỗi_base64_của_video&gt;\", \"fileName\": \"my_video.mp4\", \"mimeType\": \"video/mp4\"}"</code></pre>
+      </section>
+
+      <!-- Section: Errors -->
+      <section id="errors">
+        <h2>
+          <span class="lang-vi">5. Xử Lý Lỗi (Error Handling)</span>
+          <span class="lang-en">5. Error Handling</span>
+        </h2>
+        <p>
+          <span class="lang-vi">Các HTTP status trả về khi có sự cố:</span>
+          <span class="lang-en">HTTP status codes returned when issues occur:</span>
+        </p>
+        <ul>
+          <li>
+            <strong>401 Unauthorized:</strong> 
+            <span class="lang-vi">Sai API Key hoặc phiên làm việc Google Labs hết hạn.</span>
+            <span class="lang-en">Invalid API Key or Google Labs session expired.</span>
+          </li>
+          <li>
+            <strong>400 Bad Request:</strong> 
+            <span class="lang-vi">Thiếu tham số bắt buộc hoặc định dạng không hợp lệ.</span>
+            <span class="lang-en">Missing required parameters or invalid format.</span>
+          </li>
+          <li>
+            <strong>429 Too Many Requests:</strong> 
+            <span class="lang-vi">Đạt giới hạn hạn mức (Rate limit) của tài khoản Google.</span>
+            <span class="lang-en">Rate limit reached for the Google account.</span>
+          </li>
+          <li>
+            <strong>503 Service Unavailable:</strong> 
+            <span class="lang-vi">Extension trong Chrome chưa được mở hoặc không kết nối Helper.</span>
+            <span class="lang-en">Chrome Extension is not running or not connected to the Helper.</span>
+          </li>
+          <li>
+            <strong>504 Gateway Timeout:</strong> 
+            <span class="lang-vi">Quá thời gian xử lý tác vụ sinh media.</span>
+            <span class="lang-en">Timeout processing the media generation task.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Client SDK -->
+      <section id="sdk">
+        <h2>
+          <span class="lang-vi">6. Tích Hợp Client SDK</span>
+          <span class="lang-en">6. Client SDK Integration</span>
+        </h2>
+        
+        <h3>
+          <span class="lang-vi">6.1 Python (Gọi Text-to-Video API)</span>
+          <span class="lang-en">6.1 Python (Call Text-to-Video API)</span>
+        </h3>
+        <pre><code class="language-python">import requests
+
+def generate_video(prompt, api_key):
+    url = "http://127.0.0.1:1241/api/text-to-video"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    payload = {
+        "prompt": prompt,
+        "aspectRatio": "16:9",
+        "duration": "8s",
+        "model": "fast"  # <span class="lang-vi">Truyền model tùy chọn (ví dụ: fast, quality, lite, lower)</span><span class="lang-en">Pass optional model (e.g., fast, quality, lite, lower)</span>
+    }
+    
+    print("Đang tạo video... (Có thể mất 1-3 phút)")
+    try:
+        response = requests.post(url, json=payload, headers=headers, timeout=240)
+        
+        if response.status_code == 200:
+            res_data = response.json()
+            if res_data.get("success"):
+                print("Tạo thành công!")
+                print("Download Link:", res_data["result"]["url"])
+                print("File vật lý đã tải về:", res_data["result"]["localPath"])
+                return res_data["result"]
+            else:
+                print("Lỗi từ API:", res_data.get("error"))
+        else:
+            print(f"Lỗi hệ thống ({response.status_code}):", response.text)
+            
+    except requests.exceptions.Timeout:
+        print("Lỗi: Quá thời gian chờ server phản hồi (Timeout).")
+    except Exception as e:
+        print("Lỗi kết nối:", str(e))
+        
+    return None</code></pre>
+
+        <h3>
+          <span class="lang-vi">6.2 Node.js (Gọi Text-to-Image API)</span>
+          <span class="lang-en">6.2 Node.js (Call Text-to-Image API)</span>
+        </h3>
+        <pre><code class="language-javascript">import axios from 'axios';
+
+async function generateImage(prompt, apiKey) {
+  console.log('Đang tạo ảnh...');
+  try {
+    const response = await axios.post(
+      'http://127.0.0.1:1241/api/text-to-image',
+      {
+        prompt: prompt,
+        aspectRatio: '1:1',
+        model: 'gem_pix_2'  // <span class="lang-vi">Truyền model tùy chọn (ví dụ: gem_pix_2, narwhal, imagen4)</span><span class="lang-en">Pass optional model (e.g., gem_pix_2, narwhal, imagen4)</span>
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        timeout: 120000
+      }
+    );
+    
+    if (response.data.success) {
+      console.log('Tạo thành công!');
+      console.log('URL Ảnh:', response.data.result.url);
+      console.log('File vật lý:', response.data.result.localPath);
+    } else {
+      console.error('Lỗi từ API:', response.data.error);
+    }
+  } catch (error) {
+    if (error.response) {
+      console.error(`Lỗi HTTP ${error.response.status}:`, error.response.data);
+    } else {
+      console.error('Lỗi kết nối:', error.message);
+    }
+  }
+}</code></pre>
+
+        <h3>
+          <span class="lang-vi">6.3 C# .NET (Gọi Image-to-Video API)</span>
+          <span class="lang-en">6.3 C# .NET (Call Image-to-Video API)</span>
+        </h3>
+        <pre><code class="language-csharp">using System;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+public class FlowLabClient
+{
+    private static readonly HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(240) };
+
+    public static async Task GenerateImageToVideoAsync(string prompt, string imageUrl, string apiKey)
+    {
+        client.DefaultRequestHeaders.Clear();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+
+        var payload = new
+        {
+            prompt = prompt,
+            mediaId = imageUrl,
+            aspectRatio = "9:16",
+            duration = "8s",
+            model = "quality"  // <span class="lang-vi">Truyền model tùy chọn (ví dụ: fast, quality, lite, lower)</span><span class="lang-en">Pass optional model (e.g., fast, quality, lite, lower)</span>
+        };
+
+        var json = JsonSerializer.Serialize(payload);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        Console.WriteLine("Đang gửi yêu cầu tạo video...");
+        try
+        {
+            var response = await client.PostAsync("http://127.0.0.1:1241/api/image-to-video", content);
+            var resultString = await response.Content.ReadAsStringAsync();
+            
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Thành công:");
+                Console.WriteLine(resultString);
+            }
+            else
+            {
+                Console.WriteLine($"Lỗi API ({response.StatusCode}): {resultString}");
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            Console.WriteLine("Lỗi: Quá thời gian chờ server phản hồi (Timeout).");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Lỗi ngoại lệ: " + ex.Message);
+        }
+    }
+}</code></pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="api_guide_script.js"></script>
+</body>
+</html>
